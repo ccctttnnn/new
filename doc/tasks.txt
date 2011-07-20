@@ -1,0 +1,88 @@
+Todo
+----
+
+externals
+- 1
+  - use revision to see if something has been changed
+- 2
+  - 
+- 3
+  - optimize external handling
+  - only use 1 level 
+  - optimize if in same repos
+
+Questions
+---------
+
+
+
+Bugs
+----
+If you create a symlink in installed -> a directory in available plugins, the documentation can't read the directory
+under installed.
+
+What should be the status of a build that passed, but THEN the build loop crashed? Answer: it's not a build status, but
+a BUILDER status. Rolf suggested "Misbehaving". Add a story to the wiki.
+
+CruiseControl.NET tray (projects.rxml) - what should we set for next build time?
+
+Generalize things like build.changeset, build.output; make them write out error messages when the file doesn't exist,
+or exists but is not readable
+
+Contents of a project panel "build details" section on the dashboard can be prerendered by the builder (as Ruby,
+or even directly as XHTML) and cached in the build artifacts directory (? but complexity cost may be too high ?)
+
+Link to /builds/Project.four (project with a dot without builds) breaks, because of the way routes.rb parses the dot
+
+To finish the RSS story:
+   * RSS icon
+   * Figure out why Firefox 1.5 goes nuts on Rolf's PC when you try to open a feed in it.
+
+Committed_by and comments on the dashboard need to be limited to a certain number of characters.
+
+Comments on the dashboard need tooltips to display the full message.
+
+If the build takes say 7501 seconds, it displays 2 hours and 5 minutes and 1 second.
+  - It might be better to display 2 hours, 5 minutes and 1 second.  Or perhaps drop the seconds?
+
+Looks like we won't detect cruise_config modification if it happens during the build
+
+Tech
+----
+* Update all Rails-generated files to Rails 2.0.2 versions thereof
+* look for a way to generate URLs in email templates through Rails' routes
+* Replace get_mime_type with MIME::Types (http://mime-types.rubyforge.org/) library
+* Project domain object
+* Extract build log parser into types
+* Upgrade Mocha to 0.5.6
+
+Necessary
+---------
+* test application_helper
+* builder
+  * should reload server settings every time it wakes up, too
+
+Build
+-----
+* ability to stop/kill
+
+Dev
+---
+* Check what happens with parsing "svn log" output if a project has svn:externals, and there is a new revision in there
+* RESTful URLs everywhere
+
+Concerns
+--------
+? Look at handling of timezones when parsing/displaying revision time. Especially, SubversionLogParser.
+  It may prove an interesting story (hopefully, not).
+
+? Parser doesn't handle gracefully a situation when local copy is ahead of the repository (perhaps, after
+  the repository was restored from a backup)
+    C:/projects/lipid/builds/passing_project/work averkhov$ svn log -r HEAD:BASE
+    svn: No such revision 7
+    ./subversion_log_parser.rb:7:in `readline': end of file reached (EOFError)
+            from ./subversion_log_parser.rb:7:in `parse'
+            ...
+
+
+Implement Git#clean_checkout(revision) as "git clean -d <revision.number>"  

@@ -1,0 +1,69 @@
+<% @sidebar = 'sidebar_index' %>
+
+<div id="main_image">
+  <div id="download_button"><%= link_to_download image_tag('download_now_orange.png') %></div>
+</div>
+
+<div class="section">
+    
+  <div class="blog summary content">
+    <div class="body">
+      <p>
+        CruiseControl.rb is a
+        <a href="http://www.martinfowler.com/articles/continuousIntegration.html">continuous integration</a>
+        tool. Its basic purpose in life is to alert members of a software project when one of them checks
+        something into source control that breaks the build.
+      </p>
+      <p>
+        CC.rb is easy to install, pleasant to use and simple to hack. It's written in
+        <a href="http://ruby-lang.org">Ruby</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="blog summary content">
+      <h3 class="title">Get started</h3>
+      <div class="body">
+        <table>
+          <tr>
+
+            <td class="instruction_detail">
+              <div class="large_number">1</div>
+              <div class="instruction_text">
+                <div class="install_step_title">Download</div>
+                Believe it or not, you have to download CruiseControl.rb in order to use it.<br/>
+                <%= link_to_download('Download it now') %>
+              </div>
+            </td>
+            <td class="instruction_detail">
+              <div class="large_number">2</div>
+              <div class="instruction_text">
+                <div class="install_step_title">Add Your Project</div>
+                <code class="steps">cruise add &lt;name&gt; -u &lt;url&gt;</code>
+                You can <%= link_to 'watch us', document_path('screencasts') %> setup a typical rails project, or read
+                more on the <%= link_to 'getting started', document_path('getting_started') %> page.
+              </div>
+            </td>
+            <td class="instruction_detail_final">
+              <div class="large_number">3</div>
+              <div class="instruction_text">
+                <div class="install_step_title">Start Cruise</div>
+                <code class="steps">cruise start</code>
+                That's it! If you have any issues, 
+                read the <%= link_to 'docs', document_path('docs') %> or <%= link_to_users_mailing_list('ask us')%>.
+              </div>
+            </td>
+          </tr>
+        </table>
+    </div>
+  </div>
+
+  <div class="blog summary content">
+    <h3 class="title">About ThoughtWorks</h3>
+    <div class="body">
+      Learn more about ThoughtWorks at
+      <a class="read-more" href="http://www.thoughtworks.com/select-country.html">ThoughtWorks.com</a>
+    </div>
+  </div>
+
+</div>

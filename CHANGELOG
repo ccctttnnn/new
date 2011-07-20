@@ -1,0 +1,156 @@
+* 1.4.0
+- support for Git, Bazaar and Mercurial (distributed source control systems) [Ben Burkert, Brett Adam, Biju Philip Chacko, Chris Johnston, johnf(https://cruisecontrolrb.lighthouseapp.com/projects/9150/tickets/236-add-bazaar-support)]
+- 'cruise add' command:
+  * -u|--url option is deprecated in favor of -r|--repository - in some cases what goes there is not a URL
+  * can be invoked as ./cruise add [project name] [repository name]
+  * -s | -source-control option added to specify the source control type
+  * infers source control type from repository location if it starts with svn:, svn+ssh: or git:
+- 'cruise stop' command:
+  * currently only works for mongrel in daemon ('-d') mode
+- build log parser recognizes errors, failures and example counts produced by RSpec
+- dashboard strips out ANSI colors when displaying a build log
+- added google analytics to the documentation pages (which is effectively the ccrb website)
+- [bugfix] dashboard gracefully handles the situation where there is site.css, but ./public/stylesheets is not a
+           writeable directory (prints a warning and keeps going on)
+- [bugfix] Added XmlServerReport.aspx for compatibility with CCTray.NET >= 1.3 [Steve Donie]
+- [bugfix] cruise start --daemon works with Webrick
+- [bugfix] stop builder processes from going zombie by using Process#detach [Kurtis Seebaldt]
+- [bugfix] made image URLS in stylesheets relative [Anselm Helbig]
+- [bugfix] Make dashboard xhtml compliant
+- [bugfix] Recognize OpenBSD as a platform
+- Improve daemon_helper to kill all child processes (don't leave any orphans)
+- [bugfix] Timeout if 'git fetch origin' hangs.  Configurable via git_load_new_changesets_timeout.
+           Fixes https://cruisecontrolrb.lighthouseapp.com/projects/9150-cruise-control-rb/tickets/229-sometimes-git-hangs
+- [bugfix] Extensive improvements to the technical accuracy, hopefully, readability of the documentation.
+
+------------------------------------------------------------------------------------------------------------------------
+* 1.3.0
+  - cruise data (build results, etc) is stored in $HOME/.cruise/ by default
+  - builds can now be serialized - with a config option set, CC.rb will only run one build at a time
+  - option to auto delete more than N builds
+  - [experimental] plugins can be installed w/ script/cruise_plugin script
+  - [bugfix] build requested status now stays on dashboard until a build starts
+  - [patch] subversion external support - Nathan Wilmes
+  - [patch] relative url support - Neal Clark
+
+------------------------------------------------------------------------------------------------------------------------
+* 1.2.1
+  - [bugfix] fixed some windows specific things to do with running a server
+  
+------------------------------------------------------------------------------------------------------------------------
+* 1.2.0
+  - build chaining implemented w/ triggers
+  - recognized NetBSD as a platform
+  - some optimizations for dashboard / CCTray performance
+  - data version of ./projects directory is stored, and necessary migrations are run automatically if cruise version
+    number is bigger than data version
+  - setting CC_BUILD_LABEL environment variable before invoking the build
+  - [bugfix] no longer passing in 'production' as RAILS_ENV to rake cruise
+  - [bugfix] handle Subversion URLs with spaces; generally improved escaping of special characters
+             on the command line
+  - [bugfix] Email notifier works with non-TLS enabled SMTP servers
+
+------------------------------------------------------------------------------------------------------------------------
+* 1.1.0
+  - individual RSS feeds for each project
+  - documented options configurable through config/site_config.rb
+  - added a "from" option to EmailNotifier configuration
+  - added Growl notifier to available plugins
+  - email notices can contain either full build log, or a link to the dashboard
+  - builder does not clear RAILS_ENV environment variable before calling custom tasks
+  - builder always sets RAILS_ENV environment to 'test' before calling default tasks
+  - "cannot connect to Subversion" situations, plugin errors and other problems that occur outside of a build loop are
+    now displayed on the dashboard
+  - custom project settings are displayed on the build log page
+  - [bugfix] Fixed cruise start --daemon option
+  - [bugfix] Removed incomplete builds from RSS feeds
+  - [bugfix] CC.rb can now live with localized (non-English) Subversion
+  - [bugfix] Fixed problems with CCTray introduced in 1.0 by adding a new build status 'incomplete'
+  - [bugfix] Corrected documentation to say "[cruise]/projects/" instead of "[cruise]/builds/"
+  - [bugfix] Recognize Solaris as a platform
+
+------------------------------------------------------------------------------------------------------------------------
+* 1.0.0
+  - IMPORTANT: 'project_config.rb' renamed to 'cruise_config.rb'
+  - IMPORTANT: RAILS_ENV is not set to "test" before calling "cruise" or a custom Rake task 
+  - checkins (and comments) now show up on dashboard
+  - cruise_config.rb can be in either [cruise]/projects/my_project/ or [cruise]/projects/my_project/work/. In other
+    words, cruise_config.rb can be placed directly into the version control and obtained from there.
+  - Build Now button changes buider state to 'build requested' immediately upon click 
+  - long lines on build page are better after putting the build log on the right column, they scroll off the screen,
+    but not under build list
+  - build artifacts are now in their own section on build page
+  - in progress builds are now shown on dashboard
+    * if you go to the the in progress build page, build artifacts & build log are visible as they are created / saved
+  - new look and feel for http://cruisecontrolrb.thoughtworks.com/
+  - comprehensive documentation built into app
+    * plugin documentation is dynamic and loaded from plugin file / directory
+  - project settings are displayed on the build page
+  - Email notifier sends a link to the build page in the message if Configuration.dashboard_url is set, 
+    or changeset, build output and project settings otherwise
+  - [bugfix] dashboard doesn't load cruise_config.rb, and therefore is not affected by errors in it
+  - [bugfix] --username and --password options in add_project didn't work
+  - [bugfix] Rendering of long lines in build log on IE
+  - [bugfix] RSS feed autodiscovery link was wrong for any action that did not belong to ProjectsController
+
+
+------------------------------------------------------------------------------------------------------------------------
+* 0.5.0
+  - IMPORTANT: working directory renamed from 'builds' to 'projects'
+  - drill down from error message to to source code  
+  - when builder detects a change to cruise_config.rb, it automatically reloads the project (no need to restart
+    the builder)
+  - 'cruise start' starts dashboard and all project builders (unless -e development or --without-builders option is
+    specified)
+  - 'cruise start' starts dashboard in production environment. Use 'cruise start -e development' for development.
+  - more, and better, documentation
+  - plugin for sending build notices as instant messages via Jabber protocol (should work with IRC, ICQ, Yahoo, MSN,
+    Google Talk or anything else that has a Jabber transport).
+  - 'build add' does not create cruise_config.rb, and therefore does not write down SVN user/password (relying on
+    password caching and/or key-based authentication and/or read-only anonymous access.  
+  - builder plugins receive build_broken and build_fixed events when build status goes from green to red and vice versa
+  - RSS feed
+  - default SVN polling interval changed to 30 seconds  
+  - dashboard displays who committed and their comments
+  - dashboard displays how much time did it take to perform a build
+  - [bugfix] Debug-level messages are logged in development mode
+  - [bugfix] Running builder doesn't block the dashboard on Windows
+  - [bugfix] Test Failure Parser correctly parses failure messages from Mocha
+  - [bugfix] dashboard autorefresh handles adding/deleting a project
+
+------------------------------------------------------------------------------------------------------------------------
+* 0.4.0
+  - pretty user interface
+  - 'Build now' button
+  - dashboard displays projects as panels, not table rows
+  - monitoring cruisecontrol.rb builds with CCTray.net
+  - browser autorefresh - seeing latest build status without hitting 'refresh' on browser
+  - builder's current activity (down/sleeping/checking for modifications/building) on the dashboard
+  - builder plugin may be packaged as a directory with multiple files. It must have init.rb then.
+  - plugin error handler: if a plugin raises an error in response to notification, builder logs the error, 
+    notifies all other plugins, then raises an error of its own (thus triggering the build_loop_failed event)
+  - improved error handling during builder initialization
+  - Bugfix: blocked spaces in project names
+------------------------------------------------------------------------------------------------------------------------
+* 0.3.0
+  - builder is building 'cruise', 'test' or 'default' target, depending on what is defined in the project
+  - when build is running, OS variable CC_BUILD_ARTIFACTS is pointing to the build artifacts directory
+  - customizable Rake task and build command
+  - customizable polling interval
+  - Handling of build loop errors (other than 'Build Failed')
+  - improved logging
+  - if builder is invoked with --trace option, it calls Rake with --trace option, too
+  - Bugfix: explicitly require 'rubygems' before trying to require 'rake', do not rely on RUBYOPT=-rubygems to be set.
+  - Bugfix: Adding a project a second time deletes the original
+  - Bugfix: Parsing SVN log output for a revision made by anonymous author
+------------------------------------------------------------------------------------------------------------------------
+* 0.2.0
+  - Unified command-line interface to web app, builder and add_project script
+  - Default port changed to 3333 (to avoid clashing with other Rails apps)
+  - Bugfix: builder invoking Rake with RAILS_ENV OS variable set to 'builder'
+  - Bugfix: not all Windows installations have rake.cmd
+  - Bugfix: CC.rb trying to build itself when a project has no Rakefile
+  
+------------------------------------------------------------------------------------------------------------------------
+* 0.1.0
+  - Initial release.
